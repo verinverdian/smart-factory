@@ -4,6 +4,7 @@ A simple and clean web-based dashboard to monitor factory performance in real-ti
 This project is designed for learning purposes and as a portfolio demo to showcase building a factory management system with modern web technologies.
 
 ## 🚀 Features
+
 - 👩‍💼 Employees Management – manage and track factory employees
 - 📦 Inventories Management – monitor and update inventories
 - 🛠️ Productions Management – track ongoing, pending, and completed productions
@@ -11,9 +12,11 @@ This project is designed for learning purposes and as a portfolio demo to showca
 - 📝 Recent Activity – keep track of latest updates and production status
 
 ## 🖼️ Preview
+
 <img width="2560" height="2670" alt="image" src="https://github.com/user-attachments/assets/e7c64f32-8e26-473f-83d2-d348dbafb033" />
 
 ## 🛠️ Tech Stack
+
 - Backend: Laravel (PHP)
 - Frontend: Blade Template + Bootstrap
 - Database: sqlite
@@ -50,6 +53,7 @@ php artisan serve
 ```
 
 ## 📊 Example Data
-Employees: 2
-Inventories: 2
-Productions: 3 (with different statuses: Done, In Progress, Pending)
+
+- Employees: 2
+- Inventories: 2
+- Productions: 3 (with different statuses: Done, In Progress, Pending)
