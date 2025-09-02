@@ -1,11 +1,29 @@
-<h1>Tambah Karyawan</h1>
+@extends('layouts.app')
 
-<form action="{{ route('employees.store') }}" method="POST">
-    @csrf
-    <input type="text" name="name" placeholder="Nama" required><br>
-    <input type="text" name="department" placeholder="Departemen" required><br>
-    <input type="text" name="position" placeholder="Posisi" required><br>
-    <button type="submit">Simpan</button>
-</form>
+@section('content')
+<div class="container mt-5">
+    <h1 class="mb-4">Tambah Karyawan</h1>
 
-<a href="{{ route('employees.index') }}">Kembali</a>
+    <form action="{{ route('employees.store') }}" method="POST">
+        @csrf
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Nama</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan nama" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="department" class="form-label">Departemen</label>
+            <input type="text" class="form-control" id="department" name="department" placeholder="Masukkan departemen" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="position" class="form-label">Posisi</label>
+            <input type="text" class="form-control" id="position" name="position" placeholder="Masukkan posisi" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        <a href="{{ route('employees.index') }}" class="btn btn-secondary ms-2">Kembali</a>
+    </form>
+</div>
+@endsection

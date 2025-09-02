@@ -1,11 +1,29 @@
-<h1>Tambah Inventaris</h1>
+@extends('layouts.app')
 
-<form method="POST" action="{{ route('inventories.store') }}">
-    @csrf
-    Nama Barang: <input type="text" name="item_name" required><br>
-    Jumlah: <input type="number" name="stock" required><br>
-    Lokasi: <input type="text" name="unit" required><br>
-    <button type="submit">Simpan</button>
-</form>
+@section('content')
+<div class="container mt-5">
+    <h1 class="mb-4">Tambah Inventaris</h1>
 
-<a href="{{ route('inventories.index') }}">Kembali</a>
+    <form method="POST" action="{{ route('inventories.store') }}">
+        @csrf
+
+        <div class="mb-3">
+            <label for="item_name" class="form-label">Nama Barang</label>
+            <input type="text" class="form-control" id="item_name" name="item_name" placeholder="Masukkan nama barang" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="stock" class="form-label">Jumlah</label>
+            <input type="number" class="form-control" id="stock" name="stock" placeholder="Masukkan jumlah stok" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="unit" class="form-label">Satuan / Lokasi</label>
+            <input type="text" class="form-control" id="unit" name="unit" placeholder="Masukkan satuan atau lokasi" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        <a href="{{ route('inventories.index') }}" class="btn btn-secondary ms-2">Kembali</a>
+    </form>
+</div>
+@endsection
