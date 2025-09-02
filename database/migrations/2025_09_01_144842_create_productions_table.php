@@ -17,7 +17,7 @@ class CreateProductionsTable extends Migration
             $table->id();
             $table->string('product_name');
             $table->integer('quantity');
-            $table->enum('status', ['todo','progress','done'])->default('todo');
+            $table->enum('status', ['todo','progress','done', 'pending'])->default('todo');
             $table->timestamps();
         });
     }    
