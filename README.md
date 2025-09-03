@@ -13,7 +13,16 @@ This project is designed for learning purposes and as a portfolio demo to showca
 
 ## 🖼️ Preview
 
-<img width="2560" height="2670" alt="image" src="https://github.com/user-attachments/assets/e7c64f32-8e26-473f-83d2-d348dbafb033" />
+#### Dashboard
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/4e3ca0d6-0fe8-48bc-a8ae-fcd20b274ff1" />
+
+#### CRUD Employees, Inventories, Productions 
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/4a12005f-a521-4848-9c02-a49ea32e58f2" />
+<br/>
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/70e53290-d7e3-43ca-9bbf-918694da00ef" />
+<br/>
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/40be35ef-4706-4c45-95cb-3fbe1e4eb1b2" />
+
 
 ## 🛠️ Tech Stack
 
@@ -27,7 +36,7 @@ This project is designed for learning purposes and as a portfolio demo to showca
 Clone the repository:
 ```
 git clone https://github.com/your-username/smart-factory.git
-cd smart-factory-dashboard
+cd smart-factory
 ```
 
 Install dependencies:
