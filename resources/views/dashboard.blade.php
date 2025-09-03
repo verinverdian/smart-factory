@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <!-- Judul -->
-    <h1 class="mb-4">📊 Smart Factory Dashboard</h1>
+    <h1 class="mt-5 mb-4 pt-4">📊 Smart Factory Dashboard</h1>
     <p class="text-muted mb-4">Pantau kinerja pabrik dengan data real-time!</p>
 
     <!-- Statistik Ringkas -->

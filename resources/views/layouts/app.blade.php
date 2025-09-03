@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="/">📊 Smart Factory</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,11 +41,14 @@
             </div>
         </div>
     </nav>
-    <main class="py-4">
+
+    <main class="py-4" style="padding-top: 70px;">
         @yield('content')
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('scripts')
 </body>
+
 
 </html>

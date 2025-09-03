@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-5 pt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Daftar Inventaris</h1>
         <a href="{{ route('inventories.create') }}" class="btn btn-primary">+ Tambah Inventaris</a>

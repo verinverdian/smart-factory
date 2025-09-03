@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-5 p-4">
     <h1 class="mb-4">Tambah Karyawan</h1>
 
     <form action="{{ route('employees.store') }}" method="POST">

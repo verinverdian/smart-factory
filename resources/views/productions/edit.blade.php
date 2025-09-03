@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-5 pt-4">
     <h1 class="mb-4">Edit Data Produksi</h1>
 
     <form action="{{ route('productions.update', $production->id) }}" method="POST">
