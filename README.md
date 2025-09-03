@@ -14,15 +14,7 @@ This project is designed for learning purposes and as a portfolio demo to showca
 ## 🖼️ Preview
 
 #### Dashboard
-<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/4e3ca0d6-0fe8-48bc-a8ae-fcd20b274ff1" />
-
-#### CRUD Employees, Inventories, Productions 
-<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/4a12005f-a521-4848-9c02-a49ea32e58f2" />
-<br/>
-<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/70e53290-d7e3-43ca-9bbf-918694da00ef" />
-<br/>
-<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/40be35ef-4706-4c45-95cb-3fbe1e4eb1b2" />
-
+<img width="500" height="1000" alt="image" src="https://github.com/user-attachments/assets/e2f3f3b8-3f3f-40cf-8442-889b4eca4fe0" />
 
 ## 🛠️ Tech Stack
 
@@ -63,6 +55,6 @@ php artisan serve
 
 ## 📊 Example Data
 
-- Employees: 2
-- Inventories: 2
-- Productions: 3 (with different statuses: Done, In Progress, Pending)
+- Employees
+- Inventories
+- Productions (with different statuses: To Do, Done, In Progress, Pending)
