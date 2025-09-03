@@ -26,7 +26,8 @@ class EmployeeController extends Controller
             $query->where('position', $request->position);
         }
 
-        $employees = $query->get();
+        // Pagination 10 data per halaman
+        $employees = $query->paginate(10)->appends($request->all());
 
         // Ambil semua departemen dan posisi unik untuk dropdown
         $departments = Employee::select('department')->distinct()->pluck('department');

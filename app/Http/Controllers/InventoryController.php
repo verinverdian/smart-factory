@@ -26,7 +26,8 @@ class InventoryController extends Controller
             $query->where('unit', $request->unit);
         }
 
-        $inventories = $query->get();
+        // Pagination 10 data per halaman
+        $inventories = $query->paginate(10)->appends($request->all());
 
         // Ambil semua satuan unik untuk dropdown
         $units = Inventory::select('unit')->distinct()->pluck('unit');

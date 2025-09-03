@@ -70,6 +70,10 @@
                     @endforeach
                 </tbody>
             </table>
+            <!-- Pagination -->
+            <div class="mt-3 d-flex justify-content-end">
+                {{ $employees->links('pagination::bootstrap-4') }}
+            </div>
             @else
             <p class="text-muted">Belum ada data karyawan.</p>
             @endif

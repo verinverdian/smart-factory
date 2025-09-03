@@ -40,10 +40,12 @@
                     <a href="{{ route('productions.index') }}" class="btn btn-secondary">Reset</a>
                 </form>
             </div>
+
             @if($productions->count() > 0)
             <table class="table table-striped align-middle">
                 <thead class="table-light">
                     <tr>
+                        <th>No</th>
                         <th>Nama Produk</th>
                         <th>Jumlah</th>
                         <th>Status</th>
@@ -52,8 +54,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($productions as $production)
+                    @foreach($productions as $index => $production)
                     <tr>
+                        <!-- Nomor urut per halaman -->
+                        <td>{{ ($productions->currentPage() - 1) * $productions->perPage() + $index + 1 }}</td>
                         <td>{{ $production->product_name }}</td>
                         <td>{{ $production->quantity }}</td>
                         <td>
@@ -80,6 +84,12 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- Pagination -->
+            <div class="mt-3 d-flex justify-content-end">
+                {{ $productions->links('pagination::bootstrap-4') }}
+            </div>
+
             @else
             <p class="text-muted">Belum ada data produksi.</p>
             @endif

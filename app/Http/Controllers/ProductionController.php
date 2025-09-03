@@ -12,23 +12,22 @@ class ProductionController extends Controller
     {
         $query = Production::query()->with('employee');
 
-        // Filter Nama Produk
         if ($request->filled('product_name')) {
             $query->where('product_name', 'like', '%' . $request->product_name . '%');
         }
 
-        // Filter Status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Filter Employee
         if ($request->filled('employee_id')) {
             $query->where('employee_id', $request->employee_id);
         }
 
-        $productions = $query->get();
-        $employees = Employee::all(); // buat dropdown employee di view
+        // paginate 10 dan menambahkan query string filter agar tetap aktif
+        $productions = $query->paginate(10)->appends($request->all());
+
+        $employees = Employee::all();
 
         return view('productions.index', compact('productions', 'employees'));
     }
