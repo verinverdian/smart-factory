@@ -53,26 +53,6 @@
         </div>
     </div>
 
-    <!-- KPI Produksi -->
-    <div class="row text-center mb-4">
-        @foreach ([
-        'Total' => ['value' => $totalProductions, 'color' => 'primary', 'icon' => '📦'],
-        'Done' => ['value' => $doneCount, 'color' => 'success', 'icon' => '✅'],
-        'In Progress' => ['value' => $progressCount, 'color' => 'warning', 'icon' => '⚙️'],
-        'Todo' => ['value' => $todoCount, 'color' => 'danger', 'icon' => '🔜'],
-        'Pending' => ['value' => $pendingCount, 'color' => 'secondary', 'icon' => '⏳']
-        ] as $label => $info)
-        <div class="col mb-3">
-            <div class="card border-0 shadow-sm rounded-3">
-                <div class="card-body">
-                    <h6 class="fw-bold">{{ $info['icon'] }} {{ $label }}</h6>
-                    <p class="fs-4 text-{{ $info['color'] }} mb-0">{{ $info['value'] ?? 0 }}</p>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-
     <!-- Target vs Realisasi & Top Employee-->
     <div class="row align-items-stretch">
         <!-- Target vs Realisasi -->
@@ -83,7 +63,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="text-center flex-fill border-end">
                         <p class="text-muted mb-1">Target</p>
-                        <h3 class="fw-bold text-secondary">50</h3>
+                        <h3 class="fw-bold text-secondary">{{ $targetProductions }}</h3>
                         <small class="text-muted">produk</small>
                     </div>
                     <div class="text-center flex-fill">
@@ -95,10 +75,18 @@
 
                 <!-- Progress Bar -->
                 @php
-                $progress = min(($productionsCount / 50) * 100, 100);
+                $progress = min(($productionsCount / $targetProductions) * 100, 100);
+                if ($progress >= 100) {
+                $progressClass = 'bg-success';
+                } elseif ($progress >= 70) {
+                $progressClass = 'bg-warning text-dark';
+                } else {
+                $progressClass = 'bg-danger';
+                }
                 @endphp
+
                 <div class="progress mb-2" style="height: 25px;">
-                    <div class="progress-bar bg-success fw-semibold" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar {{ $progressClass }} fw-semibold" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">
                         {{ round($progress, 1) }}%
                     </div>
                 </div>
@@ -133,7 +121,48 @@
         </div>
     </div>
 
+    <!-- Top Produk -->
+    <div class="row mb-5">
+        <div class="card shadow-sm border-0 p-4 rounded-3 h-100">
+            <h5 class="fw-bold mb-3">🔥 Top Produk</h5>
 
+            @if ($topProducts->isNotEmpty())
+            <div class="alert alert-info border-start border-5 border-info rounded-3 fw-bold">
+                🥇 Produk Terlaris:
+                {{ $topProducts[0]->product_name }} — {{ $topProducts[0]->total }} produksi
+            </div>
+            @endif
+
+            <ol class="list-group list-group-numbered">
+                @foreach ($topProducts as $product)
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="text-start">{{ $product->product_name }}</span>
+                    <span class="badge bg-primary rounded-pill">{{ $product->total }} produk</span>
+                </li>
+                @endforeach
+            </ol>
+        </div>
+    </div>
+
+    <!-- KPI Produksi -->
+    <div class="row text-center mb-4">
+        @foreach ([
+        'Total' => ['value' => $totalProductions, 'color' => 'primary', 'icon' => '📦'],
+        'Done' => ['value' => $doneCount, 'color' => 'success', 'icon' => '✅'],
+        'In Progress' => ['value' => $progressCount, 'color' => 'warning', 'icon' => '⚙️'],
+        'Todo' => ['value' => $todoCount, 'color' => 'danger', 'icon' => '🔜'],
+        'Pending' => ['value' => $pendingCount, 'color' => 'secondary', 'icon' => '⏳']
+        ] as $label => $info)
+        <div class="col mb-3">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body">
+                    <h6 class="fw-bold">{{ $info['icon'] }} {{ $label }}</h6>
+                    <p class="fs-4 text-{{ $info['color'] }} mb-0">{{ $info['value'] ?? 0 }}</p>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
 
     @php
     // Accept either $productions (controller newer) or $recentProductions (older)

@@ -91,6 +91,13 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
+        $topProducts = Production::select('product_name', DB::raw('COUNT(*) as total'))
+            ->groupBy('product_name')
+            ->orderByDesc('total')
+            ->take(5)
+            ->get();
+
+
         return view('dashboard', compact(
             'employeesCount',
             'inventoriesCount',
@@ -109,7 +116,8 @@ class DashboardController extends Controller
             'productCounts',
             'productEmployees',
             'targetProductions', // 🎯 progress bar
-            'topEmployees'       // 🏆 leaderboard
+            'topEmployees',       // 🏆 leaderboard
+            'topProducts'
         ));
     }
 }
