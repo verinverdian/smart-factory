@@ -73,6 +73,11 @@
         @endforeach
     </div>
 
+    @php
+    // Accept either $productions (controller newer) or $recentProductions (older)
+    $recentList = $productions ?? $recentProductions ?? collect();
+    @endphp
+
     <!-- Recent Activity -->
     <div class="card shadow-sm border-0 mb-5">
         <div class="card-body">
@@ -89,7 +94,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($recentProductions as $index => $production)
+                        @forelse($recentList as $index => $production)
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $production->product_name }}</td>
@@ -102,17 +107,21 @@
                                 'done' => 'success',
                                 'pending' => 'secondary'
                                 ];
-                                $color = $statusColors[$production->status] ?? 'dark';
+                                $color = $statusColors[strtolower($production->status ?? '')] ?? 'dark';
                                 @endphp
-                                <span class="badge bg-{{ $color }}">{{ ucfirst($production->status) }}</span>
+                                <span class="badge bg-{{ $color }}">
+                                    {{ ucfirst($production->status ?? '-') }}
+                                </span>
                             </td>
                             <td>
-                                {{ $production->created_at ? $production->created_at->format('d M Y H:i') : '-' }}
+                                {{ optional($production->created_at)->format('d M Y H:i') ?? '-' }}
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="text-center text-muted">No recent production data.</td>
+                            <td colspan="5" class="text-center text-muted">
+                                No recent production data.
+                            </td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -124,7 +133,7 @@
     <!-- Charts Side by Side -->
     <div class="row mb-5">
         <!-- Bar Chart Produksi per Bulan -->
-        <div class="col-md-6 mb-4">
+        <div class="col-md-6 mb-5">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h6>📈 Produksi per Bulan</h6>
@@ -134,7 +143,7 @@
         </div>
 
         <!-- Line Chart Tren Produksi -->
-        <div class="col-md-6 mb-4">
+        <div class="col-md-6 mb-5">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h6>📊 Tren Produksi</h6>
@@ -144,10 +153,10 @@
         </div>
 
         <!-- Pie Chart Status Produksi -->
-        <div class="col-md-6 mb-4">
+        <div class="col-md-6 mb-5">
             <div class="card shadow-sm border-0">
                 <div class="card-body text-center">
-                    <h6>🥧 Status Produksi</h6>
+                    <h6>⏳ Status Produksi</h6>
                     <div style="max-width: 300px; margin: 0 auto;">
                         <canvas id="statusChart" height="120"></canvas>
                     </div>
@@ -156,10 +165,10 @@
         </div>
 
         <!-- Donut Chart Distribusi Produk -->
-        <div class="col-md-6 mb-4">
+        <div class="col-md-6 mb-5">
             <div class="card shadow-sm border-0">
                 <div class="card-body text-center">
-                    <h6>🍰 Distribusi Produksi per Produk</h6>
+                    <h6>📦 Distribusi Produksi per Produk</h6>
                     <div style="max-width: 300px; margin: 0 auto;">
                         <canvas id="productChart" height="120"></canvas>
                     </div>

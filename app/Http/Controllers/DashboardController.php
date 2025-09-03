@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $totalProductions = $productionsCount;
         $doneCount        = Production::where('status', 'done')->count();
         $progressCount    = Production::where('status', 'progress')->count();
-        $todoCount          = Production::where('status', 'todo')->count();
+        $todoCount        = Production::where('status', 'todo')->count();
         $pendingCount     = Production::where('status', 'pending')->count();
 
         // Produksi per bulan (bar chart)
@@ -51,8 +51,9 @@ class DashboardController extends Controller
         $statusLabels = $statusData->keys();
         $statusCounts = $statusData->values();
 
-        // Recent activity: ambil 5 data terakhir
-        $recentProductions = Production::latest()
+        // Recent activity: ambil 5 data terakhir dengan relasi employee
+        $recentProductions = Production::with('employee')
+            ->latest()
             ->take(5)
             ->get();
 
@@ -77,7 +78,7 @@ class DashboardController extends Controller
             'progressCount',
             'pendingCount',
             'todoCount',
-            'recentProductions', // <-- tambahkan ini
+            'recentProductions', // sudah include relasi employee
             'productLabels',
             'productCounts'
         ));

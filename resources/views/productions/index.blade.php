@@ -22,7 +22,8 @@
                         <th>Nama Produk</th>
                         <th>Jumlah</th>
                         <th>Status</th>
-                        <th class="text-center">Aksi</th>
+                        <th>Employee</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,7 +42,8 @@
                             <span class="badge bg-secondary">{{ $production->status }}</span>
                             @endif
                         </td>
-                        <td class="text-center">
+                        <td>{{ optional($production->employee)->name ?? '-' }}</td>
+                        <td>
                             <a href="{{ route('productions.edit', $production->id) }}" class="btn btn-sm btn-warning">Edit</a>
                             <form action="{{ route('productions.destroy', $production->id) }}" method="POST" class="d-inline">
                                 @csrf

@@ -28,6 +28,16 @@
             </select>
         </div>
 
+        <div class="mb-3">
+            <label for="employee_id" class="form-label">Karyawan</label>
+            <select class="form-select" id="employee_id" name="employee_id" required>
+                <option value="">-- Pilih Karyawan --</option>
+                @foreach($employees as $employee)
+                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-primary">Simpan</button>
         <a href="{{ route('productions.index') }}" class="btn btn-secondary ms-2">Kembali</a>
     </form>

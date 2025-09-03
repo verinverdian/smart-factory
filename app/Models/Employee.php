@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['name', 'department', 'position'];
+
+    public function productions()
+    {
+        return $this->hasMany(Production::class, 'employee_id');
+    }
 }
