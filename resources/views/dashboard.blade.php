@@ -73,6 +73,68 @@
         @endforeach
     </div>
 
+    <!-- Target vs Realisasi & Top Employee-->
+    <div class="row align-items-stretch">
+        <!-- Target vs Realisasi -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0 p-4 rounded-3 h-100">
+                <h5 class="fw-bold mb-4">🎯 Target vs Realisasi</h5>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="text-center flex-fill border-end">
+                        <p class="text-muted mb-1">Target</p>
+                        <h3 class="fw-bold text-secondary">50</h3>
+                        <small class="text-muted">produk</small>
+                    </div>
+                    <div class="text-center flex-fill">
+                        <p class="text-muted mb-1">Realisasi</p>
+                        <h3 class="fw-bold text-primary">{{ $productionsCount }}</h3>
+                        <small class="text-muted">produk</small>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                @php
+                $progress = min(($productionsCount / 50) * 100, 100);
+                @endphp
+                <div class="progress mb-2" style="height: 25px;">
+                    <div class="progress-bar bg-success fw-semibold" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">
+                        {{ round($progress, 1) }}%
+                    </div>
+                </div>
+
+                <p class="text-muted mt-2 mb-0">
+                    Capaian bulan ini: <strong>{{ round($progress, 1) }}%</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Top Employee -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0 p-4 rounded-3 h-100">
+                <h5 class="fw-bold mb-3">🏆 Top Employee</h5>
+
+                @if ($topEmployees->isNotEmpty())
+                <div class="alert alert-warning border-start border-5 border-warning rounded-3 fw-bold">
+                    🏅 Top Performer (Bulan Ini):
+                    {{ $topEmployees[0]->name }} — {{ $topEmployees[0]->total }} produk
+                </div>
+                @endif
+
+                <ol class="list-group list-group-numbered">
+                    @foreach ($topEmployees as $employee)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="text-start">{{ $employee->name }}</span>
+                        <span class="badge bg-primary rounded-pill">{{ $employee->total }} produk</span>
+                    </li>
+                    @endforeach
+                </ol>
+            </div>
+        </div>
+    </div>
+
+
+
     @php
     // Accept either $productions (controller newer) or $recentProductions (older)
     $recentList = $productions ?? $recentProductions ?? collect();
@@ -126,6 +188,11 @@
                         @endforelse
                     </tbody>
                 </table>
+                <div class="text-end mt-1">
+                    <a href="/productions" class="small fst-italic text-decoration-none">
+                        Lihat semua data produksi
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -276,6 +343,10 @@
 
         // Donut Chart Distribusi Produk
         const ctxDonut = document.getElementById('productChart').getContext('2d');
+
+        // data employee per produk dari backend
+        const employees = @json($productEmployees);
+
         new Chart(ctxDonut, {
             type: 'doughnut',
             data: {
@@ -297,11 +368,30 @@
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'top'
+                        position: 'right',
+                        labels: {
+                            boxWidth: 50,
+                            padding: 10
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw;
+                                const productIndex = context.dataIndex;
+
+                                // ambil list karyawan dari data backend
+                                const employeeList = employees[productIndex] || [];
+
+                                return `${label}: ${value} (By: ${employeeList.join(', ')})`;
+                            }
+                        }
                     }
                 }
             }
         });
+
     });
 </script>
 @endpush

@@ -7,7 +7,7 @@ use App\Models\Inventory;
 use App\Models\Production;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Illuminate\Support\Str; // jika ingin pakai helper string
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -51,19 +51,45 @@ class DashboardController extends Controller
         $statusLabels = $statusData->keys();
         $statusCounts = $statusData->values();
 
-        // Recent activity: ambil 5 data terakhir dengan relasi employee
+        // Recent activity
         $recentProductions = Production::with('employee')
             ->latest()
             ->take(5)
             ->get();
 
-        // Distribusi produksi per product_name
-        $productData = Production::selectRaw('product_name, COUNT(*) as total')
+        // ===== Distribusi produksi per produk =====
+        $productCountsByLabel = Production::select('product_name', DB::raw('COUNT(*) as total'))
             ->groupBy('product_name')
             ->pluck('total', 'product_name');
 
-        $productLabels = $productData->keys();
-        $productCounts = $productData->values();
+        $productLabels = $productCountsByLabel->keys()->values();
+        $productCounts = $productCountsByLabel->values();
+
+        $prodEmployeeRows = Production::with('employee')
+            ->select('product_name', 'employee_id')
+            ->groupBy('product_name', 'employee_id')
+            ->get();
+
+        $employeesPerProduct = $prodEmployeeRows
+            ->groupBy('product_name')
+            ->map(function ($group) {
+                return $group->pluck('employee.name')->filter()->unique()->values();
+            });
+
+        $productEmployees = $productLabels->map(function ($label) use ($employeesPerProduct) {
+            return isset($employeesPerProduct[$label]) ? $employeesPerProduct[$label] : collect();
+        })->values();
+
+        // 🎯 Target produksi bulan ini (contoh: 50 produk)
+        $targetProductions = 50;
+
+        // 🏆 Top Employees (pakai join biar tidak duplikat/empty)
+        $topEmployees = Production::join('employees', 'productions.employee_id', '=', 'employees.id')
+            ->select('employees.name', DB::raw('COUNT(productions.id) as total'))
+            ->groupBy('employees.id', 'employees.name')
+            ->orderByDesc('total')
+            ->take(3)
+            ->get();
 
         return view('dashboard', compact(
             'employeesCount',
@@ -78,9 +104,12 @@ class DashboardController extends Controller
             'progressCount',
             'pendingCount',
             'todoCount',
-            'recentProductions', // sudah include relasi employee
+            'recentProductions',
             'productLabels',
-            'productCounts'
+            'productCounts',
+            'productEmployees',
+            'targetProductions', // 🎯 progress bar
+            'topEmployees'       // 🏆 leaderboard
         ));
     }
 }
