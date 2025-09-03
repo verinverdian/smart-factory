@@ -15,6 +15,33 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
+            <!-- Filter -->
+            <div class="mt-2 mb-2">
+                <form action="{{ route('employees.index') }}" method="GET" class="mb-3 d-flex gap-2">
+                    <input type="text" name="name" class="form-control" placeholder="Cari nama..." value="{{ request('name') }}">
+
+                    <select name="department" class="form-select">
+                        <option value="">-- Semua Departemen --</option>
+                        @foreach($departments as $department)
+                        <option value="{{ $department }}" {{ request('department') == $department ? 'selected' : '' }}>
+                            {{ $department }}
+                        </option>
+                        @endforeach
+                    </select>
+
+                    <select name="position" class="form-select">
+                        <option value="">-- Semua Posisi --</option>
+                        @foreach($positions as $position)
+                        <option value="{{ $position }}" {{ request('position') == $position ? 'selected' : '' }}>
+                            {{ $position }}
+                        </option>
+                        @endforeach
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{{ route('employees.index') }}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
             @if($employees->count() > 0)
             <table class="table table-striped align-middle">
                 <thead class="table-light">

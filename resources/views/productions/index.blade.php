@@ -15,6 +15,31 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
+            <!-- Filter -->
+            <div class="mt-2 mb-2">
+                <form action="{{ route('productions.index') }}" method="GET" class="mb-3 d-flex gap-2">
+                    <input type="text" name="product_name" class="form-control" placeholder="Cari nama produk..." value="{{ request('product_name') }}">
+
+                    <select name="status" class="form-select">
+                        <option value="">-- Semua Status --</option>
+                        <option value="todo" {{ request('status') == 'todo' ? 'selected' : '' }}>To Do</option>
+                        <option value="progress" {{ request('status') == 'progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
+                    </select>
+
+                    <select name="employee_id" class="form-select">
+                        <option value="">-- Semua Employee --</option>
+                        @foreach($employees as $employee)
+                        <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                            {{ $employee->name }}
+                        </option>
+                        @endforeach
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{{ route('productions.index') }}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
             @if($productions->count() > 0)
             <table class="table table-striped align-middle">
                 <thead class="table-light">

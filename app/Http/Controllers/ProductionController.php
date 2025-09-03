@@ -8,10 +8,29 @@ use App\Models\Employee;
 
 class ProductionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $productions = Production::all();
-        return view('productions.index', compact('productions'));
+        $query = Production::query()->with('employee');
+
+        // Filter Nama Produk
+        if ($request->filled('product_name')) {
+            $query->where('product_name', 'like', '%' . $request->product_name . '%');
+        }
+
+        // Filter Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter Employee
+        if ($request->filled('employee_id')) {
+            $query->where('employee_id', $request->employee_id);
+        }
+
+        $productions = $query->get();
+        $employees = Employee::all(); // buat dropdown employee di view
+
+        return view('productions.index', compact('productions', 'employees'));
     }
 
     public function create()
@@ -39,7 +58,6 @@ class ProductionController extends Controller
         $employees = Employee::all(); // <- pastikan ini ada
         return view('productions.edit', compact('production', 'employees'));
     }
-
 
     public function update(Request $request, Production $production)
     {

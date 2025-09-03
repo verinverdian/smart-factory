@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -6,10 +7,31 @@ use App\Models\Inventory;
 
 class InventoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $inventories = Inventory::all();
-        return view('inventories.index', compact('inventories'));
+        $query = Inventory::query();
+
+        // Filter nama barang
+        if ($request->filled('item_name')) {
+            $query->where('item_name', 'like', '%' . $request->item_name . '%');
+        }
+
+        // Filter stok
+        if ($request->filled('stock')) {
+            $query->where('stock', $request->stock);
+        }
+
+        // Filter satuan
+        if ($request->filled('unit')) {
+            $query->where('unit', $request->unit);
+        }
+
+        $inventories = $query->get();
+
+        // Ambil semua satuan unik untuk dropdown
+        $units = Inventory::select('unit')->distinct()->pluck('unit');
+
+        return view('inventories.index', compact('inventories', 'units'));
     }
 
     public function create()
@@ -24,7 +46,7 @@ class InventoryController extends Controller
             'stock' => 'required',
             'unit' => 'required'
         ]);
-        
+
         Inventory::create($request->all());
         return redirect()->route('inventories.index')->with('success', 'Data inventaris berhasil ditambahkan');;
     }

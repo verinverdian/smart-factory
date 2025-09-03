@@ -15,6 +15,40 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
+            <!-- Filter -->
+            <div class="mt-2 mb-2">
+                <form action="{{ route('inventories.index') }}" method="GET" class="mb-3 d-flex gap-2">
+                    <input type="text" name="item_name" class="form-control" placeholder="Cari nama barang..." value="{{ request('item_name') }}">
+
+                    <input type="number" name="stock" class="form-control" placeholder="Stok" value="{{ request('stock') }}">
+
+                    <select name="unit" class="form-select">
+                        <option value="">-- Semua Satuan --</option>
+                        @foreach($units as $unit)
+                        <option value="{{ $unit }}" {{ request('unit') == $unit ? 'selected' : '' }}>{{ $unit }}</option>
+                        @endforeach
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{{ route('inventories.index') }}" class="btn btn-secondary">Reset</a>
+                </form>
+                <script>
+                    function submitFilter() {
+                        document.getElementById('filterForm').submit();
+                    }
+
+                    // Debounce untuk input teks agar tidak submit tiap huruf
+                    let debounceTimer;
+
+                    function debounceSubmit() {
+                        clearTimeout(debounceTimer);
+                        debounceTimer = setTimeout(() => {
+                            submitFilter();
+                        }, 500); // 500ms delay
+                    }
+                </script>
+
+            </div>
             @if($inventories->count() > 0)
             <table class="table table-striped align-middle">
                 <thead class="table-light">

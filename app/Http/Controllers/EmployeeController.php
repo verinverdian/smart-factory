@@ -7,10 +7,32 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::all();
-        return view('employees.index', compact('employees'));
+        $query = Employee::query();
+
+        // Filter nama
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        // Filter departemen
+        if ($request->filled('department')) {
+            $query->where('department', $request->department);
+        }
+
+        // Filter posisi
+        if ($request->filled('position')) {
+            $query->where('position', $request->position);
+        }
+
+        $employees = $query->get();
+
+        // Ambil semua departemen dan posisi unik untuk dropdown
+        $departments = Employee::select('department')->distinct()->pluck('department');
+        $positions = Employee::select('position')->distinct()->pluck('position');
+
+        return view('employees.index', compact('employees', 'departments', 'positions'));
     }
 
     public function create()
