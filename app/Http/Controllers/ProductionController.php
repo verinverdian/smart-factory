@@ -102,4 +102,76 @@ class ProductionController extends Controller
             ->route('productions.index', $request->query())
             ->with('success', 'Data berhasil dihapus');
     }
+
+    public function exportCsvManual(Request $request)
+    {
+        $filters = $request->only(['product_name', 'status', 'employee_id']);
+
+        // Ambil data dengan filter
+        $query = \App\Models\Production::with('employee');
+
+        if (!empty($filters['product_name'])) {
+            $query->where('product_name', 'like', '%' . $filters['product_name'] . '%');
+        }
+        if (!empty($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+        if (!empty($filters['employee_id'])) {
+            $query->where('employee_id', $filters['employee_id']);
+        }
+
+        $productions = $query->get();
+
+        // Nama file
+        $fileName = "productions.csv";
+
+        // Header HTTP supaya browser download
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        // Callback untuk output CSV
+        $callback = function () use ($productions) {
+            $file = fopen('php://output', 'w');
+
+            // Header kolom
+            fputcsv($file, ['Nama Produk', 'Jumlah', 'Status', 'Nama Employee']);
+
+            // Isi data
+            foreach ($productions as $p) {
+                // Mapping status dengan switch agar compatible PHP 7.x
+                switch ($p->status) {
+                    case 'done':
+                        $statusLabel = 'Done';
+                        break;
+                    case 'progress':
+                        $statusLabel = 'In Progress';
+                        break;
+                    case 'todo':
+                        $statusLabel = 'To Do';
+                        break;
+                    case 'pending':
+                        $statusLabel = 'Pending';
+                        break;
+                    default:
+                        $statusLabel = $p->status;
+                }
+
+                fputcsv($file, [
+                    $p->product_name,
+                    $p->quantity,
+                    $statusLabel,
+                    $p->employee->name ?? '-'
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }

@@ -4,7 +4,12 @@
 <div class="container mt-5 pt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Daftar Produksi</h1>
-        <a href="{{ route('productions.create', request()->query()) }}" class="btn btn-primary">+ Tambah Data Produksi</a>
+        <div class="d-flex gap-2">
+            <a href="{{ route('productions.create', request()->query()) }}" class="btn btn-primary">+ Tambah Data Produksi</a>
+            <a href="{{ route('productions.exportManual', request()->query()) }}" class="btn btn-success">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export CSV
+            </a>
+        </div>
     </div>
 
     @if(session('success'))

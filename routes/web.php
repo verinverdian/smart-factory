@@ -11,6 +11,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/productions/export-manual', [ProductionController::class, 'exportCsvManual'])->name('productions.exportManual');
 
 Route::resources([
     'employees' => EmployeeController::class,
