@@ -4,7 +4,7 @@
 <div class="container mt-5 pt-4">
     <h1 class="mb-4">Edit Karyawan</h1>
 
-    <form action="{{ route('employees.update', $employee->id) }}" method="POST">
+    <form action="{{ route('employees.update', ['employee' => $employee->id] + request()->query()) }}" method="POST">
         @csrf
         @method('PUT')
 

@@ -4,12 +4,13 @@
 <div class="container mt-5 pt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Daftar Karyawan</h1>
-        <a href="{{ route('employees.create') }}" class="btn btn-primary">+ Tambah Karyawan</a>
+        <a href="{{ route('employees.create', request()->query()) }}" class="btn btn-primary">+ Tambah Karyawan</a>
     </div>
 
     @if(session('success'))
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
+        <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
 
@@ -59,10 +60,14 @@
                         <td>{{ $employee->department }}</td>
                         <td>{{ $employee->position }}</td>
                         <td class="text-center">
-                            <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                            <form action="{{ route('employees.destroy', $employee->id) }}" method="POST" class="d-inline">
+                            <a href="{{ route('employees.edit', [$employee->id] + request()->query()) }}" class="btn btn-sm btn-warning">Edit</a>
+
+                            <form action="{{ route('employees.destroy', [$employee->id] + request()->query()) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
+                                @foreach(request()->query() as $key => $value)
+                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                @endforeach
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>
                             </form>
                         </td>
@@ -72,7 +77,7 @@
             </table>
             <!-- Pagination -->
             <div class="mt-3 d-flex justify-content-end">
-                {{ $employees->links('pagination::bootstrap-4') }}
+                {{ $employees->appends(request()->query())->links('pagination::bootstrap-4') }}
             </div>
             @else
             <p class="text-muted">Belum ada data karyawan.</p>

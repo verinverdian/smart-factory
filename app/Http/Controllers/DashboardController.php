@@ -24,26 +24,34 @@ class DashboardController extends Controller
         $todoCount        = Production::where('status', 'todo')->count();
         $pendingCount     = Production::where('status', 'pending')->count();
 
-        // Produksi per bulan (bar chart)
+        // ============================
+        // 📊 Produksi per bulan (bar chart)
+        // ============================
         $productionsPerMonth = Production::selectRaw('strftime("%m", created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', 2025) // ✅ filter tahun
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('total', 'month');
 
+        // Buat range bulan Jan–Des 2025 (default 0)
         $allMonths = collect(range(1, 12))->mapWithKeys(function ($m) {
             $key = str_pad($m, 2, '0', STR_PAD_LEFT);
             return [$key => 0];
         });
 
+        // Merge data real dengan default
         $finalData = $allMonths->merge($productionsPerMonth);
 
-        $chartLabels = $finalData->keys()->map(function ($m) {
-            return Carbon::create()->month((int)$m)->format('F');
+        // Label fix: Jan–Des 2025
+        $chartLabels = collect(range(1, 12))->map(function ($m) {
+            return Carbon::createFromDate(2025, $m, 1)->format('F');
         });
 
         $chartData = $finalData->values();
 
-        // Produksi per status (pie chart)
+        // ============================
+        // 🥧 Produksi per status (pie chart)
+        // ============================
         $statusData = Production::selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
@@ -51,13 +59,17 @@ class DashboardController extends Controller
         $statusLabels = $statusData->keys();
         $statusCounts = $statusData->values();
 
-        // Recent activity
+        // ============================
+        // 🕒 Recent activity
+        // ============================
         $recentProductions = Production::with('employee')
             ->latest()
             ->take(5)
             ->get();
 
-        // ===== Distribusi produksi per produk =====
+        // ============================
+        // 📦 Distribusi produksi per produk
+        // ============================
         $productCountsByLabel = Production::select('product_name', DB::raw('COUNT(*) as total'))
             ->groupBy('product_name')
             ->pluck('total', 'product_name');
@@ -80,10 +92,14 @@ class DashboardController extends Controller
             return isset($employeesPerProduct[$label]) ? $employeesPerProduct[$label] : collect();
         })->values();
 
+        // ============================
         // 🎯 Target produksi bulan ini (contoh: 50 produk)
+        // ============================
         $targetProductions = 50;
 
-        // 🏆 Top Employees (pakai join biar tidak duplikat/empty)
+        // ============================
+        // 🏆 Top Employees
+        // ============================
         $topEmployees = Production::join('employees', 'productions.employee_id', '=', 'employees.id')
             ->select('employees.name', DB::raw('COUNT(productions.id) as total'))
             ->groupBy('employees.id', 'employees.name')
@@ -91,12 +107,14 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
+        // ============================
+        // ⭐ Top Products
+        // ============================
         $topProducts = Production::select('product_name', DB::raw('COUNT(*) as total'))
             ->groupBy('product_name')
             ->orderByDesc('total')
             ->take(5)
             ->get();
-
 
         return view('dashboard', compact(
             'employeesCount',

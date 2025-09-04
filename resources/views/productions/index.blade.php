@@ -4,12 +4,13 @@
 <div class="container mt-5 pt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Daftar Produksi</h1>
-        <a href="{{ route('productions.create') }}" class="btn btn-primary">+ Tambah Data Produksi</a>
+        <a href="{{ route('productions.create', request()->query()) }}" class="btn btn-primary">+ Tambah Data Produksi</a>
     </div>
 
     @if(session('success'))
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
+        <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
 
@@ -25,11 +26,12 @@
                         <option value="todo" {{ request('status') == 'todo' ? 'selected' : '' }}>To Do</option>
                         <option value="progress" {{ request('status') == 'progress' ? 'selected' : '' }}>In Progress</option>
                         <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     </select>
 
                     <select name="employee_id" class="form-select">
-                        <option value="">-- Semua Employee --</option>
-                        @foreach($employees as $employee)
+                        <option value="">-- Semua Employee (Dept. Produksi) --</option>
+                        @foreach($employees->where('department', 'Produksi') as $employee)
                         <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
                             {{ $employee->name }}
                         </option>
@@ -73,8 +75,8 @@
                         </td>
                         <td>{{ optional($production->employee)->name ?? '-' }}</td>
                         <td>
-                            <a href="{{ route('productions.edit', $production->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                            <form action="{{ route('productions.destroy', $production->id) }}" method="POST" class="d-inline">
+                            <a href="{{ route('productions.edit', [$production->id] + request()->query()) }}" class="btn btn-sm btn-warning">Edit</a>
+                            <form action="{{ route('productions.destroy', [$production->id] + request()->query()) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>

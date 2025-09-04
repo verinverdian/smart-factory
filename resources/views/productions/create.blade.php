@@ -4,7 +4,7 @@
 <div class="container mt-5 pt-4">
     <h1 class="mb-4">Tambah Produksi</h1>
 
-    <form action="{{ route('productions.store') }}" method="POST">
+    <form action="{{ route('productions.store', request()->query()) }}" method="POST">
         @csrf
 
         <div class="mb-3">
@@ -20,7 +20,7 @@
         <div class="mb-3">
             <label for="status" class="form-label">Status</label>
             <select class="form-select" id="status" name="status" required>
-                <option value="">-- Pilih Status --</option>
+                <option value="" disabled>-- Pilih Status --</option>
                 <option value="todo">Todo</option>
                 <option value="progress">In Progress</option>
                 <option value="done">Done</option>
@@ -29,14 +29,19 @@
         </div>
 
         <div class="mb-3">
-            <label for="employee_id" class="form-label">Karyawan</label>
+            <label for="employee_id" class="form-label">Karyawan (Dept. Produksi)</label>
             <select class="form-select" id="employee_id" name="employee_id" required>
-                <option value="">-- Pilih Karyawan --</option>
-                @foreach($employees as $employee)
-                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                <option value="" disabled {{ old('employee_id', request('employee_id')) ? '' : 'selected' }}>
+                    -- Pilih Karyawan (Dept. Produksi) --
+                </option>
+                @foreach($employees->where('department', 'Produksi') as $employee)
+                <option value="{{ $employee->id }}" {{ old('employee_id', request('employee_id')) == $employee->id ? 'selected' : '' }}>
+                    {{ $employee->name }}
+                </option>
                 @endforeach
             </select>
         </div>
+
 
         <button type="submit" class="btn btn-primary">Simpan</button>
         <a href="{{ route('productions.index') }}" class="btn btn-secondary ms-2">Kembali</a>

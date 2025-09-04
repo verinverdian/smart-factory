@@ -4,22 +4,20 @@
 <div class="container mt-5 pt-4">
     <h1 class="mb-4">Edit Data Produksi</h1>
 
-    <form action="{{ route('productions.update', $production->id) }}" method="POST">
+    <form action="{{ route('productions.update', ['production' => $production->id] + request()->query())}}" method="POST">
         @csrf
         @method('PUT')
 
         <!-- Nama Produksi -->
         <div class="mb-3">
             <label for="product_name" class="form-label">Nama Produksi</label>
-            <input type="text" class="form-control" id="product_name" name="product_name" 
-                   value="{{ old('product_name', $production->product_name) }}" required>
+            <input type="text" class="form-control" id="product_name" name="product_name" value="{{ old('product_name', $production->product_name) }}" required>
         </div>
 
         <!-- Jumlah -->
         <div class="mb-3">
             <label for="quantity" class="form-label">Jumlah</label>
-            <input type="number" class="form-control" id="quantity" name="quantity" 
-                   value="{{ old('quantity', $production->quantity) }}" required>
+            <input type="number" class="form-control" id="quantity" name="quantity" value="{{ old('quantity', $production->quantity) }}" required>
         </div>
 
         <!-- Status -->
@@ -33,16 +31,15 @@
             </select>
         </div>
 
-        <!-- Karyawan -->
+        <!-- Karyawan (Departemen Produksi) -->
         <div class="mb-3">
             <label for="employee_id" class="form-label">Karyawan</label>
             <select class="form-select" id="employee_id" name="employee_id" required>
-                <option value="">-- Pilih Karyawan --</option>
+                <option value="">-- Pilih Karyawan (Dept. Produksi) --</option>
                 @foreach($employees as $employee)
-                    <option value="{{ $employee->id }}" 
-                        {{ old('employee_id', $production->employee_id) == $employee->id ? 'selected' : '' }}>
-                        {{ $employee->name }}
-                    </option>
+                <option value="{{ $employee->id }}" {{ old('employee_id', $production->employee_id) == $employee->id ? 'selected' : '' }}>
+                    {{ $employee->name }}
+                </option>
                 @endforeach
             </select>
         </div>

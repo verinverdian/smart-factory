@@ -48,10 +48,16 @@ class EmployeeController extends Controller
             'department' => 'required',
             'position' => 'required'
         ]);
-
-        Employee::create($request->all());
-        return redirect()->route('employees.index')->with('success', 'Karyawan berhasil ditambahkan');
+    
+        // hanya ambil data untuk karyawan
+        Employee::create($request->only(['name', 'department', 'position']));
+    
+        // balikin ke halaman dengan filter terakhir
+        return redirect()
+            ->route('employees.index', $request->query())
+            ->with('success', 'Karyawan berhasil ditambahkan');
     }
+    
 
     public function edit(Employee $employee)
     {
@@ -66,13 +72,19 @@ class EmployeeController extends Controller
             'position' => 'required'
         ]);
 
-        $employee->update($request->all());
-        return redirect()->route('employees.index')->with('success', 'Karyawan berhasil diperbarui');
+        $employee->update($request->except(['_token', '_method']));
+
+        return redirect()
+            ->route('employees.index', $request->query())
+            ->with('success', 'Karyawan berhasil diperbarui');
     }
 
-    public function destroy(Employee $employee)
+    public function destroy(Employee $employee, Request $request)
     {
         $employee->delete();
-        return redirect()->route('employees.index')->with('success', 'Karyawan berhasil dihapus');
+
+        return redirect()
+            ->route('employees.index', $request->query())
+            ->with('success', 'Karyawan berhasil dihapus');
     }
 }

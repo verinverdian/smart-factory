@@ -4,7 +4,7 @@
 <div class="container mt-5 pt-4">
     <h1 class="mb-4">Edit Data Inventaris</h1>
 
-    <form action="{{ route('inventories.update', $inventory->id) }}" method="POST">
+    <form action="{{ route('inventories.update', ['inventory' => $inventory->id] + request()->query()) }}" method="POST">
         @csrf
         @method('PUT')
 

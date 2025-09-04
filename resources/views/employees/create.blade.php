@@ -4,9 +4,9 @@
 <div class="container mt-5 p-4">
     <h1 class="mb-4">Tambah Karyawan</h1>
 
-    <form action="{{ route('employees.store') }}" method="POST">
+    <form action="{{ route('employees.store', request()->query()) }}" method="POST">
         @csrf
-
+        
         <div class="mb-3">
             <label for="name" class="form-label">Nama</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan nama" required>

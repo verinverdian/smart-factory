@@ -4,7 +4,7 @@
 <div class="container mt-5 pt-4">
     <h1 class="mb-4">Tambah Inventaris</h1>
 
-    <form method="POST" action="{{ route('inventories.store') }}">
+    <form method="POST" action="{{ route('inventories.store', request()->query()) }}">
         @csrf
 
         <div class="mb-3">

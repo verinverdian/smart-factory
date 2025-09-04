@@ -48,8 +48,11 @@ class InventoryController extends Controller
             'unit' => 'required'
         ]);
 
-        Inventory::create($request->all());
-        return redirect()->route('inventories.index')->with('success', 'Data inventaris berhasil ditambahkan');;
+        Inventory::create($request->only(['item_name', 'stock', 'unit']));
+
+        return redirect()
+            ->route('inventories.index', $request->query())
+            ->with('success', 'Data inventaris berhasil ditambahkan');;
     }
 
     public function edit(Inventory $inventory)
@@ -65,13 +68,19 @@ class InventoryController extends Controller
             'unit' => 'required'
         ]);
 
-        $inventory->update($request->all());
-        return redirect()->route('inventories.index')->with('success', 'Data inventaris berhasil diperbarui');
+        $inventory->update($request->except(['_token', '_method']));
+        
+        return redirect()
+            ->route('inventories.index', $request->query())
+            ->with('success', 'Data inventaris berhasil diperbarui');
     }
 
-    public function destroy(Inventory $inventory)
+    public function destroy(Inventory $inventory, Request $request)
     {
         $inventory->delete();
-        return redirect()->route('inventories.index')->with('success', 'Data inventaris berhasil dihapus');
+
+        return redirect()
+            ->route('inventories.index', $request->query())
+            ->with('success', 'Data inventaris berhasil dihapus');
     }
 }

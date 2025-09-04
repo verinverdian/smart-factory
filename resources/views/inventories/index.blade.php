@@ -4,12 +4,13 @@
 <div class="container mt-5 pt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Daftar Inventaris</h1>
-        <a href="{{ route('inventories.create') }}" class="btn btn-primary">+ Tambah Inventaris</a>
+        <a href="{{ route('inventories.create', request()->query()) }}" class="btn btn-primary">+ Tambah Inventaris</a>
     </div>
 
     @if(session('success'))
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
+        <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
 
@@ -66,8 +67,8 @@
                         <td>{{ $inventory->stock }}</td>
                         <td>{{ $inventory->unit }}</td>
                         <td class="text-center">
-                            <a href="{{ route('inventories.edit', $inventory->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                            <form action="{{ route('inventories.destroy', $inventory->id) }}" method="POST" class="d-inline">
+                            <a href="{{ route('inventories.edit', [$inventory->id] + request()->query()) }}" class="btn btn-sm btn-warning">Edit</a>
+                            <form action="{{ route('inventories.destroy', [$inventory->id] + request()->query()) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>

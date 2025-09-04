@@ -10,7 +10,7 @@ class ProductionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Production::query()->with('employee');
+        $query = Production::query();
 
         if ($request->filled('product_name')) {
             $query->where('product_name', 'like', '%' . $request->product_name . '%');
@@ -27,15 +27,25 @@ class ProductionController extends Controller
         // paginate 10 dan menambahkan query string filter agar tetap aktif
         $productions = $query->paginate(10)->appends($request->all());
 
-        $employees = Employee::all();
+        // Ambil karyawan Departemen Produksi untuk dropdown filter
+        $employees = Employee::where('department', 'Produksi')
+            ->orderBy('name')
+            ->get();
 
         return view('productions.index', compact('productions', 'employees'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $employees = Employee::all(); // ambil semua employee
-        return view('productions.create', compact('employees'));
+        // Hanya karyawan Produksi
+        $employees = Employee::where('department', 'Produksi')
+            ->orderBy('name')
+            ->get();
+
+        // Kirim filter index sebagai old value supaya tetap aktif
+        $filters = $request->only(['product_name', 'status', 'employee_id']);
+
+        return view('productions.create', compact('employees', 'filters'));
     }
 
     public function store(Request $request)
@@ -47,14 +57,23 @@ class ProductionController extends Controller
             'employee_id' => 'required'
         ]);
 
-        Production::create($request->all());
-        return redirect()->route('productions.index')->with('success', 'Data berhasil ditambahkan');
+        Production::create($request->only(['product_name', 'quantity', 'status', 'employee_id']));
+
+        return redirect()
+            ->route('productions.index', $request->query())
+            ->with('success', 'Data berhasil ditambahkan');
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
+        // Ambil data production
         $production = Production::findOrFail($id);
-        $employees = Employee::all(); // <- pastikan ini ada
+
+        // Ambil karyawan Produksi untuk dropdown
+        $employees = Employee::where('department', 'Produksi')
+            ->orderBy('name')
+            ->get();
+
         return view('productions.edit', compact('production', 'employees'));
     }
 
@@ -67,13 +86,20 @@ class ProductionController extends Controller
             'employee_id' => 'required'
         ]);
 
-        $production->update($request->all());
-        return redirect()->route('productions.index')->with('success', 'Data berhasil diperbarui');
+        $production->update($request->except(['_token', '_method']));
+
+        return redirect()
+            ->route('productions.index', $request->query())
+            ->with('success', 'Data berhasil diperbarui');
     }
 
-    public function destroy(Production $production)
+
+    public function destroy(Production $production, Request $request)
     {
         $production->delete();
-        return redirect()->route('productions.index')->with('success', 'Data berhasil dihapus');
+
+        return redirect()
+            ->route('productions.index', $request->query())
+            ->with('success', 'Data berhasil dihapus');
     }
 }
