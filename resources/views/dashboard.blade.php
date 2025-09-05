@@ -103,7 +103,7 @@
                 <h5 class="fw-bold mb-3">🏆 Top Employee</h5>
 
                 @if ($topEmployees->isNotEmpty())
-                <div class="alert alert-warning border-start border-5 border-warning rounded-3 fw-bold">
+                <div class="alert alert-warning rounded-3 fw-bold">
                     🏅 Top Performer (Bulan Ini):
                     {{ $topEmployees[0]->name }} — {{ $topEmployees[0]->total }} produk
                 </div>
@@ -127,7 +127,7 @@
             <h5 class="fw-bold mb-3">🔥 Top Produk</h5>
 
             @if ($topProducts->isNotEmpty())
-            <div class="alert alert-info border-start border-5 border-info rounded-3 fw-bold">
+            <div class="alert alert-info rounded-3 fw-bold">
                 🥇 Produk Terlaris:
                 {{ $topProducts[0]->product_name }} — {{ $topProducts[0]->total }} produksi
             </div>
