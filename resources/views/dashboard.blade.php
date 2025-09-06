@@ -124,26 +124,25 @@
     </div>
 
     <!-- Top Produk -->
-    <div class="row mb-5">
-        <div class="card shadow-sm border-0 p-4 rounded-3 h-100">
-            <h5 class="fw-bold mb-3">🔥 Top Produk</h5>
 
-            @if ($topProducts->isNotEmpty())
-            <div class="alert alert-info rounded-3 fw-bold">
-                🥇 Produk Terlaris:
-                {{ $topProducts[0]->product_name }} — {{ $topProducts[0]->total }} produksi
-            </div>
-            @endif
+    <div class="card shadow-sm border-0 p-4 rounded-3 h-100 mb-5">
+        <h5 class="fw-bold mb-3">🔥 Top Produk</h5>
 
-            <ol class="list-group list-group-numbered">
-                @foreach ($topProducts as $product)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span class="text-start">{{ $product->product_name }}</span>
-                    <span class="badge bg-primary rounded-pill">{{ $product->total }} produk</span>
-                </li>
-                @endforeach
-            </ol>
+        @if ($topProducts->isNotEmpty())
+        <div class="alert alert-info rounded-3 fw-bold">
+            🥇 Produk Terlaris:
+            {{ $topProducts[0]->product_name }} ({{ $topProducts[0]->total }} produksi)
         </div>
+        @endif
+
+        <ol class="list-group list-group-numbered">
+            @foreach ($topProducts as $product)
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span class="text-start">{{ $product->product_name }}</span>
+                <span class="badge bg-primary rounded-pill">{{ $product->total }} produk</span>
+            </li>
+            @endforeach
+        </ol>
     </div>
 
     <!-- KPI Produksi -->
@@ -162,7 +161,7 @@
             <div class="card border-0 shadow-sm rounded-3">
                 <a href="{{ $info['link'] }}" class="text-decoration-none">
                     <div class="card-body">
-                        <h6 class="fw-bold">{{ $info['icon'] }} {{ $label }}</h6>
+                        <h6 class="fw-bold text-black">{{ $info['icon'] }} {{ $label }}</h6>
                         <p class="fs-4 text-{{ $info['color'] }} mb-0">{{ $info['value'] ?? 0 }}</p>
                     </div>
                 </a>
