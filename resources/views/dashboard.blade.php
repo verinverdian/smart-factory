@@ -114,18 +114,32 @@
                 <h5 class="fw-bold mb-3">🏆 Top Employee</h5>
 
                 @if ($topEmployees->isNotEmpty())
-                <div class="alert alert-warning rounded-3 fw-bold d-flex align-items-center">
-                    🏅 Top Performer (Bulan Ini):
-                    {{ $topEmployees[0]->name }} ({{ $topEmployees[0]->total }} produk)
-                    @if ($topEmployees[0]->photo)
-                    <img src="{{ asset('storage/'.$topEmployees[0]->photo) }}" alt="Avatar" class="rounded-circle me-2" width="30" height="30">
-                    @else
-                    <div class="border-1 text-white rounded-circle d-flex justify-content-center align-items-center me-2" style="width:30px; height:30px; font-size:12px; margin-left:8px; background-color:rgb(102 77 3);">
-                        {{ strtoupper(substr($topEmployees[0]->name,0,2)) }}
+                <div class="alert alert-warning rounded-3 fw-bold d-flex align-items-center justify-content-between">
+
+                    <!-- Bagian Icon -->
+                    <div class="me-2" style="font-size: 20px;">
+                        🏅
                     </div>
-                    @endif
+
+                    <!-- Bagian Tulisan -->
+                    <div class="flex-grow-1">
+                        Top Performer (Bulan Ini):
+                        {{ $topEmployees[0]->name }} ({{ $topEmployees[0]->total }} produk)
+                    </div>
+
+                    <!-- Bagian Foto / Avatar -->
+                    <div>
+                        @if ($topEmployees[0]->photo)
+                        <img src="{{ asset('storage/'.$topEmployees[0]->photo) }}" alt="Avatar" class="rounded-circle" width="30" height="30">
+                        @else
+                        <div class="rounded-circle d-flex justify-content-center align-items-center text-white" style="width:30px; height:30px; font-size:12px; background-color:rgb(102 77 3);">
+                            {{ strtoupper(substr($topEmployees[0]->name,0,2)) }}
+                        </div>
+                        @endif
+                    </div>
                 </div>
                 @endif
+
 
                 <ol class="list-group list-group-numbered">
                     @foreach ($topEmployees as $employee)
@@ -193,65 +207,63 @@
     @endphp
 
     <!-- Recent Activity -->
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body">
-            <h5 class="fw-bold mb-3">📝 Recent Activity</h5>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>#</th>
-                            <th>Production Name</th>
-                            <th>Employee</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($recentList as $index => $production)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $production->product_name }}</td>
-                            <td>{{ optional($production->employee)->name ?? '-' }}</td>
-                            <td>
-                                @php
-                                $statusColors = [
-                                'todo' => 'danger',
-                                'progress' => 'warning',
-                                'done' => 'success',
-                                'pending' => 'secondary'
-                                ];
-                                $color = $statusColors[strtolower($production->status ?? '')] ?? 'dark';
-                                @endphp
-                                <span class="badge bg-{{ $color }}">
-                                    {{ ucfirst($production->status ?? '-') }}
-                                </span>
-                            </td>
-                            <td>
-                                {{ optional($production->created_at)->format('d M Y H:i') ?? '-' }}
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">
-                                No recent production data.
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                <div class="text-end mt-1">
-                    <a href="/productions" class="small fst-italic text-decoration-none">
-                        Lihat semua data produksi
-                    </a>
-                </div>
+    <div class="card shadow-sm border-0 p-4 rounded-3 mb-5">
+        <h5 class="fw-bold mb-3">📝 Recent Activity</h5>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Production Name</th>
+                        <th>Employee</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($recentList as $index => $production)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $production->product_name }}</td>
+                        <td>{{ optional($production->employee)->name ?? '-' }}</td>
+                        <td>
+                            @php
+                            $statusColors = [
+                            'todo' => 'danger',
+                            'progress' => 'warning',
+                            'done' => 'success',
+                            'pending' => 'secondary'
+                            ];
+                            $color = $statusColors[strtolower($production->status ?? '')] ?? 'dark';
+                            @endphp
+                            <span class="badge bg-{{ $color }}">
+                                {{ ucfirst($production->status ?? '-') }}
+                            </span>
+                        </td>
+                        <td>
+                            {{ optional($production->created_at)->format('d M Y H:i') ?? '-' }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">
+                            No recent production data.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+            <div class="text-end mt-1">
+                <a href="/productions" class="small fst-italic text-decoration-none">
+                    Lihat semua data produksi
+                </a>
             </div>
         </div>
     </div>
 
     <!-- Charts Side by Side -->
     <div class="row mb-4">
-    <h5 class="fw-bold mb-4">📊 Total Produksi Tahun Ini</h5>
+        <h5 class="fw-bold mb-4 mt-4">📊 Total Produksi Tahun Ini</h5>
         <!-- Bar Chart Produksi per Bulan -->
         <div class="col-md-6 mb-5">
             <div class="card shadow-sm border-0">
