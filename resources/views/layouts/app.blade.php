@@ -24,6 +24,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    @auth
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('dashboard') ? 'active fw-bold text-primary' : '' }}" href="{{ url('/') }}">
                             🏠 Dashboard
@@ -44,6 +45,13 @@
                             ⚙️ Productions
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="nav-link text-danger">🔓 Logout</button>
+                        </form>
+                    </li>
+                    @endauth
                 </ul>
             </div>
         </div>
@@ -64,4 +72,5 @@
     </footer>
 
 </body>
+
 </html>

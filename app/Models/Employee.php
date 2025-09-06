@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Employee extends Model
+
+class Employee extends Authenticatable
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'department', 'position'];
+    protected $fillable = ['name', 'email', 'password', 'department', 'position', 'photo'];
+
+    protected $hidden = ['password'];
 
     public function productions()
     {

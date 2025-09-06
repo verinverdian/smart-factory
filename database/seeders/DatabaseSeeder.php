@@ -73,5 +73,9 @@ class DatabaseSeeder extends Seeder
             ['product_name' => 'Rak Mainan', 'quantity' => 15, 'status' => 'progress', 'employee_id' => 14, 'created_at' => now()->subMonths(rand(0, 8)), 'updated_at' => now()],
             ['product_name' => 'Lemari Arsip', 'quantity' => 5, 'status' => 'done', 'employee_id' => 15, 'created_at' => now()->subMonths(rand(0, 8)), 'updated_at' => now()],
         ]);
+
+        $this->call([
+            EmployeeSeeder::class,
+        ]);
     }
 }
