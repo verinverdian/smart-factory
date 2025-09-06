@@ -8,6 +8,15 @@
     <h1 class="mt-5 mb-4 pt-4">📊 Smart Factory Dashboard</h1>
     <p class="text-muted mb-4">Pantau kinerja pabrik dengan data real-time!</p>
 
+    <!-- Alert Sapaan -->
+    @if(Auth::check())
+    <div class="alert alert-light border shadow-sm alert-dismissible fade show mt-4 rounded-3 mb-5" role="alert">
+        👋 Hai <strong>{{ Auth::user()->name }}</strong>, selamat datang kembali di <b>Smart Factory Dashboard</b>!
+        Semoga harimu produktif 🚀
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
     <!-- Statistik Ringkas -->
     <div class="row text-center mb-4">
         <div class="col-md-4 mb-3">
