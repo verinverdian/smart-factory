@@ -5,16 +5,26 @@ This project is designed for learning purposes and as a portfolio demo to showca
 
 ## 🚀 Features
 
-- 👩‍💼 Employees Management – manage and track factory employees
-- 📦 Inventories Management – monitor and update inventories
-- 🛠️ Productions Management – track ongoing, pending, and completed productions
-- 📊 Analytics & Visualization – monthly production charts, trends, and product distribution
-- 📝 Recent Activity – keep track of latest updates and production status
+- 🔑 **Authentication** (Login & Logout using `employees` table)
+- 👨‍💼 **CRUD Employees** – manage factory staff data
+- 📦 **CRUD Inventories** – manage warehouse stock and supplies
+- 🛠 **CRUD Productions** – track production items with status (`Todo`, `In Progress`, `Done`)
+- 📊 **Interactive Dashboard**
+  - Target vs Realization
+  - Top Employee & Top Product
+  - Production KPIs
+  - Recent Activity
+  - Monthly Production Chart
+  - Production Trends
+  - Production Distribution by Product
+- 📤 **Export CSV** for production data
+- 🔒 **Route Protection** – prevent login page access after successful login
 
 ## 🖼️ Preview
 
 #### Dashboard
-<img width="500" height="1000" alt="image" src="https://github.com/user-attachments/assets/e2f3f3b8-3f3f-40cf-8442-889b4eca4fe0" />
+<img width="560" height="1990" alt="image" src="https://github.com/user-attachments/assets/2038a628-04f4-4f0d-b865-9656183076d5" />
+
 
 ## 🛠️ Tech Stack
 
@@ -43,9 +53,14 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Run migrations:
+Run migrations & seeders:
 ```
-php artisan migrate
+php artisan migrate --seed
+```
+Seeder will automatically create an admin account:
+```
+Email    : admin@factory.com
+Password : password123
 ```
 
 Start the development server:
@@ -58,3 +73,7 @@ php artisan serve
 - Employees
 - Inventories
 - Productions (with different statuses: To Do, Done, In Progress, Pending)
+
+## 👩‍💻 Contributor
+
+[Verin Verdian] – Fullstack Developer
