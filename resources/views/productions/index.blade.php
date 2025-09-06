@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '⚙️ Productions | Smart Factory')
+
 @section('content')
 <div class="container mt-5 pt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -22,11 +24,14 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <!-- Filter -->
-            <div class="mt-2 mb-2">
-                <form action="{{ route('productions.index') }}" method="GET" class="mb-3 d-flex gap-2">
-                    <input type="text" name="product_name" class="form-control" placeholder="Cari nama produk..." value="{{ request('product_name') }}">
+            <div class="mt-2 mb-3">
+                <form action="{{ route('productions.index') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
 
-                    <select name="status" class="form-select">
+                    <!-- Cari produk -->
+                    <input type="text" name="product_name" class="form-control form-control-sm w-auto" placeholder="Cari nama produk..." value="{{ request('product_name') }}">
+
+                    <!-- Status -->
+                    <select name="status" class="form-select form-select-sm w-auto">
                         <option value="">-- Semua Status --</option>
                         <option value="todo" {{ request('status') == 'todo' ? 'selected' : '' }}>To Do</option>
                         <option value="progress" {{ request('status') == 'progress' ? 'selected' : '' }}>In Progress</option>
@@ -34,7 +39,8 @@
                         <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     </select>
 
-                    <select name="employee_id" class="form-select">
+                    <!-- Employee -->
+                    <select name="employee_id" class="form-select form-select-sm w-auto">
                         <option value="">-- Semua Employee (Dept. Produksi) --</option>
                         @foreach($employees->where('department', 'Produksi') as $employee)
                         <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
@@ -43,10 +49,16 @@
                         @endforeach
                     </select>
 
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="{{ route('productions.index') }}" class="btn btn-secondary">Reset</a>
+                    <!-- Tanggal -->
+                    <input type="date" name="start_date" class="form-control form-control-sm w-auto" value="{{ request('start_date') }}">
+                    <input type="date" name="end_date" class="form-control form-control-sm w-auto" value="{{ request('end_date') }}">
+
+                    <!-- Tombol -->
+                    <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                    <a href="{{ route('productions.index') }}" class="btn btn-sm btn-secondary">Reset</a>
                 </form>
             </div>
+
 
             @if($productions->count() > 0)
             <table class="table table-striped align-middle">
@@ -57,6 +69,7 @@
                         <th>Jumlah</th>
                         <th>Status</th>
                         <th>Employee</th>
+                        <th>Tanggal</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -79,6 +92,7 @@
                             @endif
                         </td>
                         <td>{{ optional($production->employee)->name ?? '-' }}</td>
+                        <td>{{ optional($production->created_at)->format('d M Y H:i') ?? '-' }}</td>
                         <td>
                             <a href="{{ route('productions.edit', [$production->id] + request()->query()) }}" class="btn btn-sm btn-warning">Edit</a>
                             <form action="{{ route('productions.destroy', [$production->id] + request()->query()) }}" method="POST" class="d-inline">

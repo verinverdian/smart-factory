@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '👨‍💼 Create Data Inventories | Smart Factory')
+
 @section('content')
 <div class="container mt-5 pt-4">
     <h1 class="mb-4">Tambah Inventaris</h1>

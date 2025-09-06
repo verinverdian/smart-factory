@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '👨‍💼 Create Data Employees | Smart Factory')
+
 @section('content')
 <div class="container mt-5 p-4">
     <h1 class="mb-4">Tambah Karyawan</h1>

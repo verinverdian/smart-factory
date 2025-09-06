@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '👨‍💼 Employees | Smart Factory')
+
 @section('content')
 <div class="container mt-5 pt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -19,9 +21,9 @@
             <!-- Filter -->
             <div class="mt-2 mb-2">
                 <form action="{{ route('employees.index') }}" method="GET" class="mb-3 d-flex gap-2">
-                    <input type="text" name="name" class="form-control" placeholder="Cari nama..." value="{{ request('name') }}">
+                    <input type="text" name="name" class="form-control form-control-sm" placeholder="Cari nama..." value="{{ request('name') }}">
 
-                    <select name="department" class="form-select">
+                    <select name="department" class="form-select form-select-sm">
                         <option value="">-- Semua Departemen --</option>
                         @foreach($departments as $department)
                         <option value="{{ $department }}" {{ request('department') == $department ? 'selected' : '' }}>
@@ -30,7 +32,7 @@
                         @endforeach
                     </select>
 
-                    <select name="position" class="form-select">
+                    <select name="position" class="form-select form-select-sm">
                         <option value="">-- Semua Posisi --</option>
                         @foreach($positions as $position)
                         <option value="{{ $position }}" {{ request('position') == $position ? 'selected' : '' }}>
@@ -39,8 +41,8 @@
                         @endforeach
                     </select>
 
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="{{ route('employees.index') }}" class="btn btn-secondary">Reset</a>
+                    <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                    <a href="{{ route('employees.index') }}" class="btn btn-sm btn-secondary">Reset</a>
                 </form>
             </div>
             @if($employees->count() > 0)

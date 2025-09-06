@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '📦 Inventories — Smart Factory')
+
 @section('content')
 <div class="container mt-5 pt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -19,19 +21,19 @@
             <!-- Filter -->
             <div class="mt-2 mb-2">
                 <form action="{{ route('inventories.index') }}" method="GET" class="mb-3 d-flex gap-2">
-                    <input type="text" name="item_name" class="form-control" placeholder="Cari nama barang..." value="{{ request('item_name') }}">
+                    <input type="text" name="item_name" class="form-control form-control-sm" placeholder="Cari nama barang..." value="{{ request('item_name') }}">
 
-                    <input type="number" name="stock" class="form-control" placeholder="Stok" value="{{ request('stock') }}">
+                    <input type="number" name="stock" class="form-control form-control-sm" placeholder="Stok" value="{{ request('stock') }}">
 
-                    <select name="unit" class="form-select">
+                    <select name="unit" class="form-select form-select-sm">
                         <option value="">-- Semua Satuan --</option>
                         @foreach($units as $unit)
                         <option value="{{ $unit }}" {{ request('unit') == $unit ? 'selected' : '' }}>{{ $unit }}</option>
                         @endforeach
                     </select>
 
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="{{ route('inventories.index') }}" class="btn btn-secondary">Reset</a>
+                    <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                    <a href="{{ route('inventories.index') }}" class="btn btn-sm btn-secondary">Reset</a>
                 </form>
                 <script>
                     function submitFilter() {

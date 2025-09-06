@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '📊 Dashboard | Smart Factory')
+
 @section('content')
 <div class="container">
     <!-- Judul -->
@@ -105,7 +107,7 @@
                 @if ($topEmployees->isNotEmpty())
                 <div class="alert alert-warning rounded-3 fw-bold">
                     🏅 Top Performer (Bulan Ini):
-                    {{ $topEmployees[0]->name }} — {{ $topEmployees[0]->total }} produk
+                    {{ $topEmployees[0]->name }} ({{ $topEmployees[0]->total }} produk)
                 </div>
                 @endif
 
@@ -145,20 +147,25 @@
     </div>
 
     <!-- KPI Produksi -->
+    <div class="mb-2">
+        <h5 class="fw-bold mb-4">📌 Key Performance Indicator Produksi</h5>
+    </div>
     <div class="row text-center mb-4">
         @foreach ([
-        'Total' => ['value' => $totalProductions, 'color' => 'primary', 'icon' => '📦'],
-        'Done' => ['value' => $doneCount, 'color' => 'success', 'icon' => '✅'],
-        'In Progress' => ['value' => $progressCount, 'color' => 'warning', 'icon' => '⚙️'],
-        'Todo' => ['value' => $todoCount, 'color' => 'danger', 'icon' => '🔜'],
-        'Pending' => ['value' => $pendingCount, 'color' => 'secondary', 'icon' => '⏳']
+        'Total' => ['value' => $totalProductions, 'color' => 'primary', 'icon' => '📦', 'link' => '/productions'],
+        'Done' => ['value' => $doneCount, 'color' => 'success', 'icon' => '✅', 'link' => '/productions?product_name=&status=done'],
+        'In Progress' => ['value' => $progressCount, 'color' => 'warning', 'icon' => '⚙️', 'link' => '/productions?product_name=&status=progress'],
+        'Todo' => ['value' => $todoCount, 'color' => 'danger', 'icon' => '🔜', 'link' => '/productions?product_name=&status=todo'],
+        'Pending' => ['value' => $pendingCount, 'color' => 'secondary', 'icon' => '⏳', 'link' => '/productions?product_name=&status=pending']
         ] as $label => $info)
         <div class="col mb-3">
             <div class="card border-0 shadow-sm rounded-3">
-                <div class="card-body">
-                    <h6 class="fw-bold">{{ $info['icon'] }} {{ $label }}</h6>
-                    <p class="fs-4 text-{{ $info['color'] }} mb-0">{{ $info['value'] ?? 0 }}</p>
-                </div>
+                <a href="{{ $info['link'] }}" class="text-decoration-none">
+                    <div class="card-body">
+                        <h6 class="fw-bold">{{ $info['icon'] }} {{ $label }}</h6>
+                        <p class="fs-4 text-{{ $info['color'] }} mb-0">{{ $info['value'] ?? 0 }}</p>
+                    </div>
+                </a>
             </div>
         </div>
         @endforeach
@@ -172,7 +179,7 @@
     <!-- Recent Activity -->
     <div class="card shadow-sm border-0 mb-5">
         <div class="card-body">
-            <h5 class="mb-3">📝 Recent Activity</h5>
+            <h5 class="fw-bold mb-3">📝 Recent Activity</h5>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">

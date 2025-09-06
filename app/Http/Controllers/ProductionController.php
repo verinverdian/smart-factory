@@ -24,6 +24,15 @@ class ProductionController extends Controller
             $query->where('employee_id', $request->employee_id);
         }
 
+        // Filter berdasarkan tanggal
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+
         // paginate 10 dan menambahkan query string filter agar tetap aktif
         $productions = $query->paginate(10)->appends($request->all());
 
