@@ -55,7 +55,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('scripts')
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-4 mt-5 border-top">
+        <div class="text-muted small">
+            &copy; {{ date('Y') }} 📊 Smart Factory. All rights reserved.
+        </div>
+    </footer>
+
 </body>
-
-
 </html>
