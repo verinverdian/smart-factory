@@ -27,7 +27,10 @@ class InventoryController extends Controller
         }
 
         // Pagination 10 data per halaman
-        $inventories = $query->paginate(10)->appends($request->all());
+        $inventories = $query
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->appends($request->all());
 
         // Ambil semua satuan unik untuk dropdown
         $units = Inventory::select('unit')->distinct()->pluck('unit');
@@ -69,7 +72,7 @@ class InventoryController extends Controller
         ]);
 
         $inventory->update($request->except(['_token', '_method']));
-        
+
         return redirect()
             ->route('inventories.index', $request->query())
             ->with('success', 'Data inventaris berhasil diperbarui');

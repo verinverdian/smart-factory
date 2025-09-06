@@ -64,14 +64,36 @@
                         <td class="text-center">
                             <a href="{{ route('employees.edit', [$employee->id] + request()->query()) }}" class="btn btn-sm btn-warning">Edit</a>
 
-                            <form action="{{ route('employees.destroy', [$employee->id] + request()->query()) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                @foreach(request()->query() as $key => $value)
-                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                                @endforeach
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>
-                            </form>
+                            <!-- Tombol Trigger Modal -->
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal{{ $employee->id }}">
+                                Hapus
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="deleteEmployeeModal{{ $employee->id }}" tabindex="-1" aria-labelledby="deleteEmployeeModalLabel{{ $employee->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title" id="deleteEmployeeModalLabel{{ $employee->id }}">Konfirmasi Hapus</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-start">
+                                            Apakah kamu yakin ingin menghapus <b>{{ $employee->name }}</b>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <form action="{{ route('employees.destroy', [$employee->id] + request()->query()) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                @foreach(request()->query() as $key => $value)
+                                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                                @endforeach
+                                                <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     @endforeach

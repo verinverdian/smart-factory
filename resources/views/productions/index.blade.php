@@ -95,11 +95,33 @@
                         <td>{{ optional($production->created_at)->format('d M Y H:i') ?? '-' }}</td>
                         <td>
                             <a href="{{ route('productions.edit', [$production->id] + request()->query()) }}" class="btn btn-sm btn-warning">Edit</a>
-                            <form action="{{ route('productions.destroy', [$production->id] + request()->query()) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>
-                            </form>
+                            <!-- Tombol Trigger Modal -->
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $production->id }}">
+                                Hapus
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="deleteModal{{ $production->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $production->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title" id="deleteModalLabel{{ $production->id }}">Konfirmasi Hapus</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Apakah kamu yakin ingin menghapus <b>{{ $production->product_name }}</b>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <form action="{{ route('productions.destroy', [$production->id] + request()->query()) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     @endforeach

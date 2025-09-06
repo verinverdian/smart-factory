@@ -32,9 +32,11 @@ class ProductionController extends Controller
             $query->whereDate('created_at', '<=', $request->end_date);
         }
 
-
         // paginate 10 dan menambahkan query string filter agar tetap aktif
-        $productions = $query->paginate(10)->appends($request->all());
+        $productions = $query
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->appends($request->all());
 
         // Ambil karyawan Departemen Produksi untuk dropdown filter
         $employees = Employee::where('department', 'Produksi')

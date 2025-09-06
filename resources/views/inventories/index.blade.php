@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '📦 Inventories — Smart Factory')
+@section('title', '📦 Inventories | Smart Factory')
 
 @section('content')
 <div class="container mt-5 pt-4">
@@ -70,11 +70,33 @@
                         <td>{{ $inventory->unit }}</td>
                         <td class="text-center">
                             <a href="{{ route('inventories.edit', [$inventory->id] + request()->query()) }}" class="btn btn-sm btn-warning">Edit</a>
-                            <form action="{{ route('inventories.destroy', [$inventory->id] + request()->query()) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>
-                            </form>
+                            <!-- Tombol Trigger Modal -->
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteInventoryModal{{ $inventory->id }}">
+                                Hapus
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="deleteInventoryModal{{ $inventory->id }}" tabindex="-1" aria-labelledby="deleteInventoryModalLabel{{ $inventory->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title" id="deleteInventoryModalLabel{{ $inventory->id }}">Konfirmasi Hapus</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-start">
+                                            Apakah kamu yakin ingin menghapus <b>{{ $inventory->item_name }}</b>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <form action="{{ route('inventories.destroy', [$inventory->id] + request()->query()) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
