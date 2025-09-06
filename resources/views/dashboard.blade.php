@@ -46,7 +46,7 @@
     </div>
 
     <!-- Navigasi Cepat -->
-    <div class="row mb-5">
+    <div class="row mb-4">
         <div class="col-md-4 mb-3">
             <a href="{{ route('employees.index') }}" class="btn btn-outline-primary w-100 shadow-sm">
                 👨‍💼 Kelola Employees
@@ -65,7 +65,7 @@
     </div>
 
     <!-- Target vs Realisasi & Top Employee-->
-    <div class="row align-items-stretch">
+    <div class="row align-items-stretch mb-4">
         <!-- Target vs Realisasi -->
         <div class="col-md-6 mb-4">
             <div class="card shadow-sm border-0 p-4 rounded-3 h-100">
@@ -114,16 +114,25 @@
                 <h5 class="fw-bold mb-3">🏆 Top Employee</h5>
 
                 @if ($topEmployees->isNotEmpty())
-                <div class="alert alert-warning rounded-3 fw-bold">
+                <div class="alert alert-warning rounded-3 fw-bold d-flex align-items-center">
                     🏅 Top Performer (Bulan Ini):
                     {{ $topEmployees[0]->name }} ({{ $topEmployees[0]->total }} produk)
+                    @if ($topEmployees[0]->photo)
+                    <img src="{{ asset('storage/'.$topEmployees[0]->photo) }}" alt="Avatar" class="rounded-circle me-2" width="30" height="30">
+                    @else
+                    <div class="border-1 text-white rounded-circle d-flex justify-content-center align-items-center me-2" style="width:30px; height:30px; font-size:12px; margin-left:8px; background-color:rgb(102 77 3);">
+                        {{ strtoupper(substr($topEmployees[0]->name,0,2)) }}
+                    </div>
+                    @endif
                 </div>
                 @endif
 
                 <ol class="list-group list-group-numbered">
                     @foreach ($topEmployees as $employee)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="text-start">{{ $employee->name }}</span>
+                        <div class="d-flex align-items-center">
+                            <span class="text-start">{{ $employee->name }}</span>
+                        </div>
                         <span class="badge bg-primary rounded-pill">{{ $employee->total }} produk</span>
                     </li>
                     @endforeach
@@ -133,7 +142,6 @@
     </div>
 
     <!-- Top Produk -->
-
     <div class="card shadow-sm border-0 p-4 rounded-3 h-100 mb-5">
         <h5 class="fw-bold mb-3">🔥 Top Produk</h5>
 
@@ -155,7 +163,7 @@
     </div>
 
     <!-- KPI Produksi -->
-    <div class="mb-2">
+    <div class="mt-4 mb-2">
         <h5 class="fw-bold mb-4">📌 Key Performance Indicator Produksi</h5>
     </div>
     <div class="row text-center mb-4">
@@ -185,7 +193,7 @@
     @endphp
 
     <!-- Recent Activity -->
-    <div class="card shadow-sm border-0 mb-5">
+    <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
             <h5 class="fw-bold mb-3">📝 Recent Activity</h5>
             <div class="table-responsive">
@@ -242,7 +250,8 @@
     </div>
 
     <!-- Charts Side by Side -->
-    <div class="row mb-5">
+    <div class="row mb-4">
+    <h5 class="fw-bold mb-4">📊 Total Produksi Tahun Ini</h5>
         <!-- Bar Chart Produksi per Bulan -->
         <div class="col-md-6 mb-5">
             <div class="card shadow-sm border-0">
