@@ -57,11 +57,6 @@ Run migrations & seeders:
 ```
 php artisan migrate --seed
 ```
-Seeder will automatically create an admin account:
-```
-Email    : admin@factory.com
-Password : password123
-```
 
 Start the development server:
 ```
